@@ -16,8 +16,8 @@ import Library from './pages/message';
 import SkillsLabs from './pages/portal';
 import Placement from './pages/office';
 import Wellness from './pages/Wellness';
-import ClubsSocieties from './pages/residence';
-import Notifications from './pages/startup';
+import Residence from './pages/residence';
+import StartupDashboard from './pages/startup';
 import GBUStore from './pages/clubs';
 import Impacts from './pages/Social_impacts';
 //import Impacts from './pages/notification';
@@ -25,7 +25,7 @@ import Impacts from './pages/Social_impacts';
 function App() {
   return (
     <Router>
-      <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+      <div className="flex h-screen bg-gray-50  text-gray-800 dark:text-gray-100">
         <MyGBUSidebar />
         <div className="flex-1 overflow-auto">
           <Routes>
@@ -45,8 +45,8 @@ function App() {
             <Route path="/portal" element={<SkillsLabs />} />
            <Route path="/office" element={<Placement />} />
             <Route path="/wellness" element={<Wellness />} />
-            <Route path="/residence" element={<ClubsSocieties />} />
-            <Route path="/startup" element={<Notifications />} />
+            <Route path="/residence" element={<Residence />} />
+            <Route path="/startup" element={<StartupDashboard />} />
             <Route path="/clubs" element={<GBUStore />} />
             <Route path="/impacts" element={<Impacts />} />
             {/* <Route path="/notification" element={<Notifications />} /> */}
