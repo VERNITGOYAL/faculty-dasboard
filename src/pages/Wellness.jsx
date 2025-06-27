@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import { Heart, Clock, MonitorSmartphone, CheckCheck, Star, Settings, AlertTriangle, Smile, Link, ActivitySquare, Phone } from 'lucide-react';
+import { Heart, Clock, MonitorSmartphone, CheckCheck, Star, Settings, AlertTriangle } from 'lucide-react';
 
 export default function Wellness() {
   const [activeTab, setActiveTab] = useState('Dashboard');
   const tabs = ['Dashboard', 'Mood Journal', 'Health Sync', 'Support'];
 
-  const tabClass = (tab) => `px-4 py-2 text-sm rounded-t ${activeTab === tab ? 'bg-white text-black font-semibold shadow' : 'text-gray-500'}`;
+  const tabClass = (tab) =>
+    `px-26 py-2 rounded ${activeTab === tab ? 'bg-white text-black font-semibold shadow' : 'text-gray-600'}`;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-fuchsia-900 to-purple-700 text-white p-6 rounded-xl shadow mb-4">
-        <h1 className="text-2xl font-bold">Wellness & Mental Health</h1>
-        <p className="text-sm">Track your well-being and maintain a healthy lifestyle</p>
-      </div>
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold text-blue-900">Wellness & Mental Health</h1>
 
       {/* Tabs */}
-      <div className="flex justify-between bg-white rounded shadow px-2 py-1 mb-4 overflow-x-auto">
+      <div className="flex space-x-4 bg-gray-100 rounded p-1">
         {tabs.map((tab) => (
-          <button key={tab} onClick={() => setActiveTab(tab)} className={tabClass(tab)}>{tab}</button>
+          <button key={tab} onClick={() => setActiveTab(tab)} className={tabClass(tab)}>
+            {tab}
+          </button>
         ))}
       </div>
 
-        {activeTab === 'Dashboard' && (
+      {/* Dashboard Tab */}
+      {activeTab === 'Dashboard' && (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-4">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             <div className="bg-white text-center p-4 rounded shadow">
               <Heart className="mx-auto text-pink-500" />
               <p className="text-xl font-bold text-black">7.2</p>
@@ -52,7 +52,7 @@ export default function Wellness() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4 mb-4">
+          <div className="grid md:grid-cols-3 gap-4">
             <div className="bg-white p-4 rounded shadow text-center">
               <Heart className="mx-auto text-pink-600" />
               <p className="font-semibold mt-2 text-black">Daily Mood Check-in</p>
@@ -71,9 +71,9 @@ export default function Wellness() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
+            {/* Mood Entries */}
             <div className="bg-white p-4 rounded shadow">
               <h2 className="text-lg font-semibold mb-2 text-black">Recent Mood Entries</h2>
-              <p className="text-sm text-black mb-4">Your mood tracking history</p>
               {[{ date: '2024-03-25', mood: '😊', note: 'Good productive day', rating: '4/6' },
                 { date: '2024-03-24', mood: '😟', note: 'Feeling stressed about exams', rating: '3/6' },
                 { date: '2024-03-23', mood: '😃', note: 'Great day with friends', rating: '5/6' },
@@ -87,25 +87,10 @@ export default function Wellness() {
                 </div>
               ))}
             </div>
-            <div className="bg-white p-4 rounded shadow">
-              <h2 className="text-lg font-semibold mb-2 text-black">Sleep Tracking</h2>
-              <p className="text-sm text-black mb-4">Your sleep pattern analysis</p>
-              {[{ date: '2024-03-25', duration: '7.5 hours', tag: 'Good' },
-                { date: '2024-03-24', duration: '6 hours', tag: 'Poor' },
-                { date: '2024-03-23', duration: '8 hours', tag: 'Excellent' },
-                { date: '2024-03-22', duration: '6.5 hours', tag: 'Fair' }].map((entry, idx) => (
-                <div key={idx} className="flex justify-between items-center py-2 border-b last:border-b-0">
-                  <div>
-                    <p className="text-sm font-semibold text-black">{entry.date}</p>
-                    <p className="text-sm text-black">{entry.duration}</p>
-                  </div>
-                  <span className={`text-xs font-semibold px-2 py-1 rounded-full ${entry.tag === 'Excellent' ? 'bg-black text-white' : 'bg-gray-100 text-black'}`}>{entry.tag}</span>
-                </div>
-              ))}
-            </div>
+
+            {/* Sleep Tracking */}
             <div className="bg-white p-4 rounded shadow">
               <h2 className="text-lg font-semibold text-black mb-2">Sleep Tracking</h2>
-              <p className="text-sm text-black mb-4">Your sleep pattern analysis</p>
               {[{ date: '2024-03-25', duration: '7.5 hours', tag: 'Good' },
                 { date: '2024-03-24', duration: '6 hours', tag: 'Poor' },
                 { date: '2024-03-23', duration: '8 hours', tag: 'Excellent' },
@@ -128,9 +113,9 @@ export default function Wellness() {
         <div className="bg-white p-6 rounded shadow space-y-6">
           <div>
             <h2 className="text-xl font-semibold text-black">Daily Mood Check-in</h2>
-            <p className="text-sm text-gray-600">How are you feeling today? Your emotions matter.</p>
+            <p className="text-sm text-gray-600">How are you feeling today?</p>
           </div>
-          <div className="grid grid-cols-3 md:grid-cols-7 gap-4">
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
             {["Very Sad", "Sad", "Okay", "Good", "Great", "Excellent"].map((mood, index) => (
               <div key={index} className="border rounded p-4 text-center text-black hover:shadow cursor-pointer">
                 <p className="text-2xl">{['😢','😟','😐','😊','😄','🤩'][index]}</p>
@@ -139,10 +124,10 @@ export default function Wellness() {
             ))}
           </div>
           <div>
-            <label className="text-sm font-medium text-black">What's on your mind? (Optional)</label>
-            <textarea className="w-full mt-1 p-2 border rounded text-black" rows="3" placeholder="Share what's making you feel this way..."></textarea>
+            <label className="text-sm font-medium text-black">What's on your mind?</label>
+            <textarea className="w-full mt-1 p-2 border rounded text-black" rows="3" placeholder="Share your thoughts..."></textarea>
           </div>
-          <button className="w-full bg-black text-white py-2 rounded font-semibold ">+ Log Today's Mood</button>
+          <button className="w-full bg-black text-white py-2 rounded font-semibold">+ Log Mood</button>
         </div>
       )}
 
@@ -151,10 +136,9 @@ export default function Wellness() {
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-lg font-semibold mb-2 text-black">Connected Apps</h2>
-            <p className="text-sm text-gray-600 mb-4">Sync your health and fitness data</p>
             {[{ name: 'Apple Health', status: 'Connected', desc: 'Syncing steps, sleep, heart rate' },
               { name: 'Google Fit', status: 'Connect', desc: 'Activity tracking' },
-              { name: 'Fitbit', status: 'Connect', desc: 'Comprehensive health tracking' }].map((app, idx) => (
+              { name: 'Fitbit', status: 'Connect', desc: 'Comprehensive tracking' }].map((app, idx) => (
               <div key={idx} className="flex justify-between items-center border rounded p-3 mb-2">
                 <div>
                   <p className="font-semibold text-black">{app.name}</p>
@@ -166,7 +150,6 @@ export default function Wellness() {
           </div>
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-lg font-semibold mb-2 text-black">Health Goals</h2>
-            <p className="text-sm text-gray-600 mb-4">Set and track your wellness objectives</p>
             <div className="mb-2">
               <p className="text-sm text-black">Daily Steps</p>
               <div className="w-full bg-gray-200 rounded-full h-2 mb-1">
@@ -198,7 +181,6 @@ export default function Wellness() {
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-lg font-semibold mb-2 text-black">Crisis Support</h2>
-            <p className="text-sm text-gray-600 mb-2">Immediate help when you need it most</p>
             <button className="bg-red-500 text-white w-full py-2 rounded flex items-center justify-center gap-2"><AlertTriangle size={16}/> Emergency Mental Health Support</button>
             <ul className="mt-4 space-y-1 text-sm text-black">
               <li><strong>National Helpline:</strong> 1800-123-4567</li>
@@ -208,7 +190,6 @@ export default function Wellness() {
           </div>
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-lg font-semibold mb-2 text-black">Wellness Mentors</h2>
-            <p className="text-sm text-gray-600 mb-4 ">Professional counselors and life coaches</p>
             {[{ name: 'Dr. Priya Sharma', field: 'Stress Management', rating: '4.9 ★', sessions: 45, status: 'Connect' },
               { name: 'Prof. Rajesh Kumar', field: 'Academic Counseling', rating: '4.8 ★', sessions: 32, status: 'Busy' },
               { name: 'Ms. Anjali Verma', field: 'Life Coaching', rating: '4.7 ★', sessions: 28, status: 'Connect' }].map((mentor, idx) => (
