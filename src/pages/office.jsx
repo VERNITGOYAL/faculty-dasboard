@@ -1,240 +1,205 @@
 import React, { useState } from "react";
-import {
-  Briefcase,
-  CheckCircle,
-  Clock,
-  Users,
-  UploadCloud,
-  Star,
-} from "lucide-react";
+import { Eye, Clock, File, CheckCircle, Plus, ArrowRight, User } from "lucide-react";
 
-const Placement = () => {
-  const [activeTab, setActiveTab] = useState("Dashboard");
+const Card = ({ icon, label, value }) => (
+  <div className="bg-white rounded shadow-sm p-4 text-center">
+    <div className="flex justify-center mb-2">{icon}</div>
+    <p className="text-2xl font-bold text-blue-800">{value}</p>
+    <p className="text-sm text-gray-500">{label}</p>
+  </div>
+);
 
-  const tabs = ["Dashboard", "Job Portal", "Resume Builder", "Alumni Mentors"];
+const FileCard = ({ title, fileId, fileType, currentOwner, submitted, due, priority, status, steps, completedSteps }) => (
+  <div className="bg-white p-4 rounded shadow-sm mb-4">
+    <div className="flex justify-between">
+      <div>
+        <h3 className="font-semibold text-lg">{title}</h3>
+        <p className="text-sm text-gray-500">{fileType} • File ID: {fileId} • Currently with: {currentOwner}</p>
+        <p className="text-sm text-gray-500 mt-1">Submitted: {submitted}</p>
+      </div>
+      <div className="text-right">
+        <span className={`text-xs px-2 py-1 rounded-full mr-2 ${priority === 'high' ? 'bg-red-100 text-red-600' : 'bg-yellow-100 text-yellow-700'}`}>{priority.toUpperCase()}</span>
+        <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700">{status.toUpperCase()}</span>
+        <p className="text-sm text-gray-600 mt-1">Due: {due}</p>
+      </div>
+    </div>
+    {steps.length > 0 && (
+      <div className="mt-3">
+        <h4 className="text-sm font-semibold mb-1">Workflow Progress:</h4>
+        <ul className="space-y-1 text-sm">
+          {steps.map((step, idx) => (
+            <li key={idx} className="flex items-center space-x-2">
+              {idx < completedSteps ? (
+                <CheckCircle size={16} className="text-green-500" />
+              ) : (
+                <div className="w-4 h-4 border border-gray-400 rounded-full"></div>
+              )}
+              <span className={idx === completedSteps ? 'text-blue-600 font-medium' : ''}>{step}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+    <div className="flex mt-4 space-x-2">
+      <button className="border px-4 py-1 rounded text-sm">View Document</button>
+      <button className="border px-4 py-1 rounded text-sm">Download</button>
+      <button className="bg-blue-900 text-white px-4 py-1 rounded text-sm ml-auto">Track Progress</button>
+    </div>
+  </div>
+);
+
+const InboxItem = ({ title, from, type, date, priority }) => (
+  <div className={`border-l-4 mb-3 p-4 rounded ${priority === 'medium' ? 'border-yellow-400 bg-yellow-50' : 'border-green-400 bg-green-50'}`}>
+    <div className="flex justify-between items-center">
+      <div>
+        <h4 className="font-medium">{title}</h4>
+        <p className="text-sm text-gray-600">From: {from}</p>
+        <p className="text-sm text-gray-500">{type} • Received: {date}</p>
+      </div>
+      <div className="space-x-2">
+        <button className="border px-3 py-1 rounded text-sm">Review</button>
+        <button className="bg-blue-900 text-white px-3 py-1 rounded text-sm">Take Action</button>
+      </div>
+    </div>
+  </div>
+);
+
+export default function EOfficeDashboard() {
+  const [tab, setTab] = useState("mydocuments");
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800 pt-6">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-green-700 to-blue-700 mx-6 px-8 py-8 text-white rounded-2xl">
-        <h1 className="text-3xl font-bold mb-2">Placement & Career Center</h1>
-        <p className="text-base opacity-90">Your gateway to internships, jobs, and career guidance</p>
-      </div>
+    <div className="min-h-screen p-6 bg-gray-50 text-gray-800 p-4">
+      <h1 className="text-2xl font-bold text-blue-800">E-Office: File Movement & Approvals</h1>
+      <p className="text-sm text-gray-500 mb-6">Digital office file management and approval workflow system</p>
 
-      {/* Navigation Tabs */}
-      <div className="flex justify-around bg-white shadow-md mx-6 px-8 py-4 mt-4 rounded-2xl">
-        {tabs.map((tab) => (
+      <div className="flex space-x-2 gap-60 border-b border-gray-200 mb-4">
+        {["My Documents", "Inbox", "Create File", "File Tracking"].map((label) => (
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`py-3 px-6 font-medium rounded-lg transition-all duration-200 ${
-              activeTab === tab
-                ? "bg-blue-100 text-blue-700 font-semibold"
-                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-            }`}
+            key={label}
+            onClick={() => setTab(label.toLowerCase().replace(/\s+/g, ""))}
+            className={`px-4 py-2 text-sm font-medium ${tab === label.toLowerCase().replace(/\s+/g, "") ? "bg-white border-t border-l border-r border-gray-200 rounded-t text-blue-800" : "text-gray-500"}`}
           >
-            {tab}
+            {label}
           </button>
         ))}
       </div>
 
-      {/* Main Content */}
-      <div className="p-6 space-y-6">
-        {activeTab === "Dashboard" && (
-          <>
-            {/* Summary Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <SummaryCard icon={<Briefcase size={28} className="text-blue-500" />} label="Applications" count="3" />
-              <SummaryCard icon={<CheckCircle size={28} className="text-green-500" />} label="Selected" count="1" />
-              <SummaryCard icon={<Clock size={28} className="text-orange-500" />} label="Pending" count="2" />
-              <SummaryCard icon={<Users size={28} className="text-purple-500" />} label="Mentors" count="5" />
-            </div>
+      {tab === "mydocuments" && (
+        <div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <Card icon={<File className="text-blue-600" />} label="Active Files" value="12" />
+            <Card icon={<Clock className="text-yellow-500" />} label="Pending Action" value="5" />
+            <Card icon={<CheckCircle className="text-green-600" />} label="Completed" value="28" />
+            <Card icon={<Eye className="text-purple-600" />} label="In Review" value="7" />
+          </div>
 
-            {/* Recent Applications */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-xl font-semibold mb-1">Recent Applications</h2>
-              <p className="text-gray-500 text-sm mb-6">Track your job and internship applications</p>
-              <div className="space-y-4">
-                <ApplicationCard
-                  title="Software Developer"
-                  company="TCS"
-                  package="₹3.5 LPA"
-                  date="2024-03-15"
-                  status="Applied"
-                  type="Full-time"
-                />
-                <ApplicationCard
-                  title="System Engineer"
-                  company="Infosys"
-                  package="₹4.0 LPA"
-                  date="2024-03-20"
-                  status="Interview Scheduled"
-                  type="Full-time"
-                />
-              </div>
-            </div>
-          </>
-        )}
+          <FileCard
+            title="Faculty Promotion Application"
+            fileId="DOC001"
+            fileType="HR Document"
+            currentOwner="Dr. Rajesh Kumar"
+            submitted="2024-06-20"
+            due="2024-07-05"
+            priority="high"
+            status="pending approval"
+            steps={["Applicant", "Department Head", "Dean Review", "HR Approval", "Final Approval"]}
+            completedSteps={2}
+          />
 
-        {activeTab === "Job Portal" && (
-          <>
-            <JobPortalCard
-              role="Software Engineer Intern"
-              company="Microsoft"
-              location="Bangalore"
-              package="₹50,000/month"
-              deadline="2024-04-15"
-              skills={["Python", "React", "Database"]}
-              match="92%"
-              type="Internship"
-            />
-            <JobPortalCard
-              role="Cloud Support Engineer"
-              company="Amazon"
-              location="Hyderabad"
-              package="₹6.5 LPA"
-              deadline="2024-04-20"
-              skills={["Cloud", "Linux", "Networking"]}
-              match="85%"
-              type="Full-time"
-            />
-          </>
-        )}
+          <FileCard
+            title="Research Grant Proposal"
+            fileId="DOC002"
+            fileType="Academic Document"
+            currentOwner="Research Committee"
+            submitted="2024-06-25"
+            due="2024-07-10"
+            priority="medium"
+            status="in review"
+            steps={[]}
+            completedSteps={0}
+          />
+        </div>
+      )}
 
-        {activeTab === "Resume Builder" && (
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Upload Section */}
-            <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-              <UploadCloud size={40} className="mx-auto text-blue-600 mb-4" />
-              <p className="mb-2">Upload your resume (PDF, DOC)</p>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded">Choose File</button>
-              <button className="mt-4 block w-full bg-gray-800 text-white py-2 rounded">Update Resume</button>
-            </div>
+      {tab === "inbox" && (
+        <div>
+          <h2 className="font-semibold text-lg mb-4">Inbox - Items Requiring Action</h2>
+          <InboxItem
+            title="Student Grade Change Request"
+            from="Dr. Priya Singh"
+            type="Grade Modification"
+            date="2024-06-26"
+            priority="medium"
+          />
+          <InboxItem
+            title="Course Curriculum Update"
+            from="Academic Committee"
+            type="Curriculum"
+            date="2024-06-24"
+            priority="low"
+          />
+        </div>
+      )}
 
-            {/* Resume Analysis */}
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold mb-1">Resume Analysis</h3>
-              <p className="text-gray-500 text-sm mb-6">AI-powered resume insights</p>
-              
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">Overall Score</span>
-                  <span className="text-green-600 font-semibold">85/100</span>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">ATS Compatibility</span>
-                  <span className="text-blue-600 font-semibold">Good</span>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700">Skill Matches</span>
-                  <span className="text-purple-600 font-semibold">12/15</span>
-                </div>
-              </div>
-              
-              <div className="mt-6">
-                <h4 className="font-semibold text-gray-800 mb-3">Suggestions:</h4>
-                <ul className="space-y-2 text-sm text-gray-600">
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Add more technical skills
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Include project quantifications
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-gray-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                    Update contact information
-                  </li>
-                </ul>
-              </div>
+      {tab === "createfile" && (
+        <div className="bg-white p-6 rounded shadow-sm">
+          <h2 className="font-semibold text-lg mb-4">Create New Office File</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <select className="border rounded p-2">
+              <option>HR Document</option>
+              <option>Academic Document</option>
+            </select>
+            <select className="border rounded p-2">
+              <option>Normal</option>
+              <option>High</option>
+            </select>
+            <input className="border rounded p-2 col-span-2" placeholder="Enter descriptive title for the file" />
+            <textarea className="border rounded p-2 col-span-2" placeholder="Provide detailed description..." rows={4}></textarea>
+            <input className="border rounded p-2" placeholder="Target Completion Date" />
+            <select className="border rounded p-2">
+              <option>Department Head</option>
+              <option>Dean</option>
+            </select>
+            <input className="border rounded p-2 col-span-2" placeholder="Attach documents" />
+          </div>
+          <p className="text-sm text-gray-500 mt-2">Workflow Route Preview: You → Department Head → Dean → Final Approval</p>
+          <button className="bg-blue-900 text-white py-2 px-4 mt-4 rounded flex items-center space-x-2">
+            <ArrowRight size={16} />
+            <span>Submit File for Processing</span>
+          </button>
+        </div>
+      )}
+
+      {tab === "filetracking" && (
+        <div>
+          <div className="bg-white p-6 rounded shadow-sm mb-6">
+            <h2 className="font-semibold text-lg mb-4">File Tracking & Search</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <input className="border rounded p-2 col-span-2" placeholder="Enter File ID or search by title..." />
+              <select className="border rounded p-2">
+                <option>All Types</option>
+              </select>
+              <select className="border rounded p-2">
+                <option>All Status</option>
+              </select>
+              <select className="border rounded p-2">
+                <option>Last 30 days</option>
+              </select>
+              <button className="bg-blue-900 text-white py-2 px-4 rounded col-span-1 flex items-center space-x-2">
+                <Eye size={16} /> <span>Track File</span>
+              </button>
             </div>
           </div>
-        )}
-
-        {activeTab === "Alumni Mentors" && (
-          <div className="grid md:grid-cols-3 gap-6">
-            <MentorCard name="Priya Sharma" company="Microsoft" title="Senior Software Engineer" rating="4.8" experience="8 years" sessions="12" tag="Full Stack Development" />
-            <MentorCard name="Rahul Gupta" company="Amazon" title="Product Manager" rating="4.9" experience="6 years" sessions="8" tag="Product Management" />
-            <MentorCard name="Anjali Verma" company="Google" title="Data Scientist" rating="4.7" experience="5 years" sessions="15" tag="Machine Learning" />
+          <div>
+            <h3 className="font-semibold text-md mb-2">Recent File Activities</h3>
+            <ul className="space-y-2">
+              <li className="bg-blue-50 rounded p-2">DOC001 moved to Dean Review • 2 hours ago</li>
+              <li className="bg-green-50 rounded p-2">DOC003 completed workflow • 1 day ago</li>
+              <li className="bg-purple-50 rounded p-2">DOC002 submitted for review • 2 days ago</li>
+            </ul>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
-};
-
-// Components
-
-const SummaryCard = ({ icon, label, count }) => (
-  <div className="bg-white p-4 rounded shadow flex flex-col items-center">
-    <div className="mb-2">{icon}</div>
-    <div className="text-2xl font-bold">{count}</div>
-    <div className="text-gray-500">{label}</div>
-  </div>
-);
-
-const ApplicationCard = ({ title, company, package: pkg, date, status, type }) => (
-  <div className="flex justify-between items-center py-4 border-b border-gray-100 last:border-b-0">
-    <div className="flex-1">
-      <h3 className="font-semibold text-gray-900">{title}</h3>
-      <p className="text-sm text-gray-600">{company} • {pkg}</p>
-      <p className="text-sm text-gray-500">Applied: {date}</p>
-    </div>
-    <div className="text-right">
-      <div className="mb-2">
-        <span className="inline-block text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full">{status}</span>
-      </div>
-      <div className="text-xs text-gray-500">{type}</div>
-    </div>
-  </div>
-);
-
-const JobPortalCard = ({ role, company, location, package: pkg, deadline, skills, match, type }) => (
-  <div className="bg-white p-6 rounded-lg shadow-sm space-y-3">
-    <div className="flex justify-between">
-      <div>
-        <h3 className="text-lg font-semibold">{role}</h3>
-        <p className="text-sm text-gray-600">{company} • {location}</p>
-        <p className="text-sm mt-1">Package: {pkg}</p>
-        <p className="text-sm text-gray-500">Deadline: {deadline}</p>
-        <div className="flex flex-wrap gap-2 mt-2">
-          {skills.map(skill => (
-            <span key={skill} className="text-xs bg-gray-200 px-2 py-1 rounded">{skill}</span>
-          ))}
-        </div>
-      </div>
-      <div className="text-right">
-        <p className="text-yellow-600 font-bold">{match} Match</p>
-        <span className="text-xs bg-gray-200 text-gray-800 px-2 py-1 rounded">{type}</span>
-      </div>
-    </div>
-    <div className="flex flex-col gap-2">
-      <button className="bg-gray-900 text-white px-4 py-2 rounded w-5/5">Apply Now</button>
-      <div className="flex gap-2">
-        <button className="border border-gray-300 px-4 py-2 rounded flex-1">View Details</button>
-        <button className="border border-gray-300 px-4 py-2 rounded flex-1">Save</button>
-      </div>
-    </div>
-  </div>
-);
-
-const MentorCard = ({ name, company, title, experience, sessions, rating, tag }) => (
-  <div className="bg-white p-6 rounded-lg shadow-sm text-center">
-    <div className="text-5xl mb-2">👤</div>
-    <h3 className="font-semibold">{name}</h3>
-    <p className="text-sm text-gray-600">{title}</p>
-    <p className="text-sm text-gray-600">{company}</p>
-    <p className="text-sm mt-2">Experience: <strong>{experience}</strong></p>
-    <p className="text-sm">Sessions: <strong>{sessions}</strong></p>
-    <p className="text-sm mb-2 flex items-center justify-center gap-1">
-      <Star size={16} className="text-yellow-500" /> {rating}
-    </p>
-    <span className="inline-block bg-gray-200 text-sm px-3 py-1 rounded-full mb-3">{tag}</span>
-    <button className="bg-gray-900 text-white px-4 py-2 rounded w-full">Connect</button>
-  </div>
-);
-
-export default Placement;
+}

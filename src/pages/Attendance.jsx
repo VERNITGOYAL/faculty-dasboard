@@ -1,318 +1,545 @@
-import React from "react";
+import React, { useState } from 'react';
+import { 
+  Clock, 
+  Users, 
+  CheckCircle, 
+  AlertCircle, 
+  Clock3, 
+  Download, 
+  FileText, 
+  Calendar,
+  Filter,
+  Eye,
+  MessageCircle,
+  X,
+  Check
+} from 'lucide-react';
 
-const Attendance = () => {
-  return (
-    <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen text-gray-800">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Attendance Dashboard</h1>
-        <p className="text-gray-600">Track your class attendance and maintain academic requirements</p>
+const AttendanceSystem = () => {
+  const [activeTab, setActiveTab] = useState('mark');
+
+  const tabs = [
+    { id: 'mark', label: 'Mark Attendance' },
+    { id: 'reports', label: 'Reports' },
+    { id: 'summary', label: 'Class Summary' },
+    { id: 'leave', label: 'Student Leave Requests' }
+  ];
+
+  const students = [
+    {
+      id: '2021001',
+      name: 'Rahul Sharma',
+      cgpa: 8.5,
+      attendance: '85%',
+      status: 'present',
+      icon: CheckCircle,
+      color: 'text-green-500'
+    },
+    {
+      id: '2021002', 
+      name: 'Priya Singh',
+      cgpa: 9.2,
+      attendance: '78%',
+      status: 'absent',
+      icon: AlertCircle,
+      color: 'text-red-500'
+    },
+    {
+      id: '2021003',
+      name: 'Amit Kumar', 
+      cgpa: 7.8,
+      attendance: '92%',
+      status: 'late',
+      icon: Clock3,
+      color: 'text-yellow-500'
+    }
+  ];
+
+  const leaveRequests = [
+    {
+      name: 'Rahul Sharma',
+      id: '2021001',
+      course: 'CS-201',
+      semester: '3rd Semester',
+      type: 'Medical',
+      reason: 'Fever and flu symptoms, doctor advised rest',
+      duration: '2024-01-15 to 2024-01-17',
+      applied: 'Applied: 2024-01-14',
+      status: 'Pending',
+      leaveBalance: { medical: '8/15', casual: '5/10' },
+      statusColor: 'bg-yellow-100 text-yellow-800'
+    },
+    {
+      name: 'Priya Singh',
+      id: '2021002',
+      course: 'CS-201',
+      semester: '3rd Semester',
+      type: 'Family Emergency',
+      reason: 'Family function - sister\'s wedding',
+      duration: '2024-01-20 to 2024-01-22',
+      applied: 'Applied: 2024-01-18',
+      status: 'Approved',
+      leaveBalance: { medical: '15/15', casual: '7/10' },
+      statusColor: 'bg-green-100 text-green-800'
+    },
+    {
+      name: 'Amit Kumar',
+      id: '2021003',
+      course: 'CS-401',
+      semester: '7th Semester',
+      type: 'Personal',
+      reason: 'Personal work at home',
+      duration: '2024-01-25 to 2024-01-25',
+      applied: 'Applied: 2024-01-24',
+      status: 'Rejected',
+      leaveBalance: { medical: '12/15', casual: '3/10' },
+      statusColor: 'bg-red-100 text-red-800'
+    }
+  ];
+
+  const renderMarkAttendance = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">Data Structures</h3>
+              <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                <div className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  <span>10:00 AM</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="w-4 h-4" />
+                  <span>45 students</span>
+                </div>
+              </div>
+            </div>
+            <div className="text-sm font-medium text-gray-600">CS-201</div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">Machine Learning</h3>
+              <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                <div className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  <span>2:00 PM</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="w-4 h-4" />
+                  <span>32 students</span>
+                </div>
+              </div>
+            </div>
+            <div className="text-sm font-medium text-gray-600">CS-401</div>
+          </div>
+        </div>
       </div>
 
-      {/* Alert */}
-      <div className="bg-gradient-to-r from-red-50 to-red-100 border-l-4 border-red-500 text-red-800 px-6 py-4 rounded-lg mb-8 shadow-sm">
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
-            </svg>
+      <div className="bg-white rounded-lg border border-gray-200">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900">Students - Data Structures</h2>
+            <p className="text-sm text-gray-600 mt-1">Mark attendance for today's class with enhanced details</p>
           </div>
-          <div className="ml-3">
-            <strong>Attendance Alert:</strong> You have 1 subject(s) with attendance below 75%. Immediate action required to avoid academic penalties.
+          <div className="flex gap-2">
+            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+              <Download className="w-4 h-4" />
+              Export CSV
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+              <FileText className="w-4 h-4" />
+              Export PDF
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Overview Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Overall Attendance</p>
-              <p className="text-2xl font-bold text-blue-600 mt-1">81.5%</p>
-            </div>
-            <div className="p-3 bg-blue-50 rounded-full">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Classes</p>
-              <p className="text-2xl font-bold text-purple-600 mt-1">170</p>
-            </div>
-            <div className="p-3 bg-purple-50 rounded-full">
-              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Classes Attended</p>
-              <p className="text-2xl font-bold text-green-600 mt-1">138</p>
-            </div>
-            <div className="p-3 bg-green-50 rounded-full">
-              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Critical Subjects</p>
-              <p className="text-2xl font-bold text-red-600 mt-1">1</p>
-            </div>
-            <div className="p-3 bg-red-50 rounded-full">
-              <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Subject-wise Attendance - Full Width with 2 columns */}
-      <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-          <svg className="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-          </svg>
-          Subject-wise Attendance
-        </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {[
-            ["Data Structures", 27, 32, "Safe"],
-            ["Machine Learning", 24, 30, "Safe"],
-            ["Software Engineering", 22, 30, "Warning"],
-            ["Computer Networks", 20, 29, "Critical"],
-            ["Database Management", 26, 31, "Safe"],
-            ["Technical Communication", 18, 20, "Safe"]
-          ].map(([subject, attended, total, status], i) => {
-            const percent = Math.round((attended / total) * 100);
-            const color =
-              percent >= 85
-                ? "bg-gradient-to-r from-green-400 to-green-500"
-                : percent >= 75
-                ? "bg-gradient-to-r from-yellow-400 to-yellow-500"
-                : "bg-gradient-to-r from-red-400 to-red-500";
-            const textColor =
-              percent >= 85
-                ? "text-green-700"
-                : percent >= 75
-                ? "text-yellow-700"
-                : "text-red-700";
+        <div className="p-6 space-y-4">
+          {students.map((student) => {
+            const StatusIcon = student.icon;
             return (
-              <div key={i} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-semibold text-gray-800">{subject}</span>
-                  <span className="text-sm text-gray-600 bg-white px-3 py-1 rounded-full shadow-sm">
-                    {attended}/{total} classes
-                  </span>
+              <div key={student.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-4">
+                  <div className={`w-3 h-3 rounded-full ${
+                    student.status === 'present' ? 'bg-green-500' : 
+                    student.status === 'absent' ? 'bg-red-500' : 'bg-yellow-500'
+                  }`} />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-medium text-gray-900">{student.name}</h3>
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    </div>
+                    <p className="text-sm text-gray-600">{student.id}</p>
+                  </div>
                 </div>
-                <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
-                  <div
-                    className={`${color} h-3 rounded-full transition-all duration-500 ease-out`}
-                    style={{ width: `${percent}%` }}
-                  ></div>
-                </div>
-                <div className="flex justify-between items-center mt-2">
-                  <span className={`text-sm font-semibold ${textColor}`}>{percent}%</span>
-                  <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                    status === "Safe" ? "bg-green-100 text-green-700" :
-                    status === "Warning" ? "bg-yellow-100 text-yellow-700" :
-                    "bg-red-100 text-red-700"
-                  }`}>{status}</span>
+
+                <div className="flex items-center gap-8">
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-900">CGPA</p>
+                    <p className="text-sm text-gray-600">{student.cgpa}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-900">Attendance</p>
+                    <p className="text-sm text-gray-600">{student.attendance}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`px-2 py-1 text-xs font-medium rounded ${
+                      student.status === 'present' ? 'bg-green-100 text-green-800' :
+                      student.status === 'absent' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {student.status}
+                    </span>
+                    <div className="flex gap-1">
+                      <button className="p-1 rounded bg-gray-200 hover:bg-gray-300">
+                        <StatusIcon className={`w-4 h-4 ${student.color}`} />
+                      </button>
+                      <button className="p-1 rounded bg-gray-200 hover:bg-gray-300">
+                        <Clock3 className="w-4 h-4 text-gray-600" />
+                      </button>
+                      <button className="p-1 rounded bg-gray-200 hover:bg-gray-300">
+                        <AlertCircle className="w-4 h-4 text-gray-600" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
+
+        <div className="p-6 border-t border-gray-200 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Topic Discussed Today</label>
+            <input 
+              type="text" 
+              placeholder="Enter topic covered in today's class"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Remarks (Optional)</label>
+            <textarea 
+              placeholder="Add any additional remarks about today's class"
+              rows={4}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        </div>
+
+        <div className="p-6 border-t border-gray-200">
+          <button className="w-full bg-gray-800 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-900">
+            Save Attendance & Class Details
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderReports = () => (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900">Attendance Reports & Analytics</h2>
+        <p className="text-sm text-gray-600 mt-1">View detailed attendance statistics and reports</p>
       </div>
 
-      {/* Attendance Visualization - Full Width */}
-      <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-8">
-        <div className="mb-4">
-          <h2 className="text-xl font-bold text-gray-900 mb-1">Attendance Visualization</h2>
-          <p className="text-sm text-gray-500">Graphical representation of your attendance</p>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+          <div className="text-3xl font-bold text-green-600">85%</div>
+          <div className="text-sm text-gray-600 mt-1">Average Attendance</div>
         </div>
-        
-        {/* Chart Container */}
-        <div className="relative h-80 bg-white border border-gray-200 rounded-lg p-4">
-          {/* Y-axis labels */}
-          <div className="absolute left-0 top-4 bottom-16 flex flex-col justify-between text-xs text-gray-500 w-8">
-            <span>100</span>
-            <span>75</span>
-            <span>50</span>
-            <span>25</span>
-            <span>0</span>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+          <div className="text-3xl font-bold text-blue-600">156</div>
+          <div className="text-sm text-gray-600 mt-1">Classes Conducted</div>
+        </div>
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <div className="text-3xl font-bold text-red-600">12</div>
+          <div className="text-sm text-gray-600 mt-1">Low Attendance Alerts</div>
+        </div>
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
+          <div className="text-3xl font-bold text-yellow-600">8</div>
+          <div className="text-sm text-gray-600 mt-1">Students Below 75%</div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <button className="flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg p-4 hover:bg-gray-50">
+          <FileText className="w-5 h-5 text-gray-600" />
+          <span className="font-medium text-black">Generate Detailed Report</span>
+        </button>
+        <button className="flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg p-4 hover:bg-gray-50">
+          <Download className="w-5 h-5 text-gray-600" />
+          <span className="font-medium text-black">Download Analytics</span>
+        </button>
+      </div>
+    </div>
+  );
+
+  const renderClassSummary = () => (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900">Class Summary</h2>
+        <p className="text-sm text-gray-600 mt-1">Add comprehensive notes and summary for today's class</p>
+      </div>
+
+      <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Topic Covered</label>
+            <input 
+              type="text" 
+              placeholder="Enter topic covered in class"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
           </div>
-          
-          {/* Grid lines */}
-          <div className="absolute left-10 right-4 top-4 bottom-16">
-            {[0, 25, 50, 75, 100].map((value, i) => (
-              <div
-                key={i}
-                className="absolute w-full border-t border-dashed border-gray-200"
-                style={{ bottom: `${(value / 100) * 100}%` }}
-              ></div>
-            ))}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Duration</label>
+            <input 
+              type="text" 
+              placeholder="Class duration (e.g., 50 minutes)"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
           </div>
-          
-          {/* Bars */}
-          <div className="absolute left-10 right-4 top-4 bottom-16 flex items-end justify-between">
-            {[
-              ["Data Structures", 85],
-              ["Machine Learning", 80],
-              ["Software Engineering", 74],
-              ["Computer Networks", 69],
-              ["DB Management", 83],
-              ["Tech Communication", 90],
-            ].map(([label, percent], i) => {
-              const color =
-                percent >= 85
-                  ? "#3b82f6"
-                  : percent >= 75
-                  ? "#3b82f6"
-                  : "#ef4444";
-              const height = (percent / 100) * 100;
-              return (
-                <div key={i} className="flex flex-col items-center group" style={{ width: "calc(100% / 6 - 8px)" }}>
-                  <div className="relative w-full">
-                    <div
-                      className="w-full rounded-t-sm transition-all duration-300 group-hover:opacity-80"
-                      style={{ 
-                        height: `${height * 2.4}px`,
-                        backgroundColor: color,
-                        minHeight: "4px"
-                      }}
-                    ></div>
-                    <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                      {percent}%
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Detailed Class Notes</label>
+          <textarea 
+            placeholder="Add comprehensive class notes, key concepts discussed, student interactions, etc."
+            rows={8}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Homework/Assignment</label>
+          <textarea 
+            placeholder="Assignment details and due date"
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Next Class Preparation</label>
+          <textarea 
+            placeholder="Topics to prepare for next class, materials needed, etc."
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <button className="w-full bg-gray-800 text-white py-3 px-4 rounded-lg font-medium hover:bg-gray-900">
+          Save Comprehensive Class Summary
+        </button>
+      </div>
+    </div>
+  );
+
+  const renderLeaveRequests = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900">Student Leave Requests</h2>
+          <p className="text-sm text-gray-600 mt-1">Review and approve student leave applications</p>
+        </div>
+        <div className="flex gap-2">
+          <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+            <Download className="w-4 h-4" />
+            Export CSV
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+            <FileText className="w-4 h-4" />
+            Export PDF
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white text-black rounded-lg border border-gray-200">
+        <div className="p-4 border-b border-gray-200">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <select className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <option>All Courses</option>
+              <option>CS-201</option>
+              <option>CS-401</option>
+            </select>
+            <select className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <option>All Semesters</option>
+              <option>3rd Semester</option>
+              <option>7th Semester</option>
+            </select>
+            <select className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <option>All Status</option>
+              <option>Pending</option>
+              <option>Approved</option>
+              <option>Rejected</option>
+            </select>
+            <button className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200">
+              <Filter className="w-4 h-4" />
+              Apply Filters
+            </button>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Student Details</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Leave Type</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Duration</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Leave Balance</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {leaveRequests.map((request, index) => (
+                <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-4 py-4">
+                    <div>
+                      <div className="font-medium text-gray-900">{request.name}</div>
+                      <div className="text-sm text-gray-600">{request.id} • {request.course}</div>
+                      <div className="text-sm text-gray-600">{request.semester}</div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          
-          {/* X-axis labels */}
-          <div className="absolute left-10 right-4 bottom-0 h-16 flex items-start justify-between pt-2">
-            {[
-              "Data Structures",
-              "Machine Learning", 
-              "Software Engineering",
-              "Computer Networks",
-              "DB Management",
-              "Tech Communication"
-            ].map((label, i) => (
-              <div key={i} className="text-xs text-gray-600 text-center leading-tight" style={{ width: "calc(100% / 6 - 8px)" }}>
-                <div className="transform -rotate-45 origin-top-left whitespace-nowrap" style={{ transformOrigin: "left top" }}>
-                  {label}
-                </div>
-              </div>
-            ))}
-          </div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div>
+                      <div className="font-medium text-gray-900">{request.type}</div>
+                      <div className="text-sm text-gray-600">{request.reason}</div>
+                      {request.type === 'Medical' && (
+                        <button className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-1">
+                          📎 View Attachment
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="text-sm">
+                      <div className="text-gray-900">{request.duration}</div>
+                      <div className="text-gray-600">{request.applied}</div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <span className={`px-2 py-1 text-xs font-medium rounded ${request.statusColor}`}>
+                      {request.status}
+                    </span>
+                    {request.status === 'Rejected' && (
+                      <div className="text-xs text-red-600 mt-1">Insufficient reason provided. Please provide more details.</div>
+                    )}
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="text-sm">
+                      <div>Medical: {request.leaveBalance.medical}</div>
+                      <div>Casual: {request.leaveBalance.casual}</div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="flex flex-col gap-2">
+                      {request.status === 'Pending' && (
+                        <div className="flex gap-1">
+                          <button className="flex items-center gap-1 px-2 py-1 text-xs bg-green-100 text-green-800 rounded hover:bg-green-200">
+                            <Check className="w-3 h-3" />
+                            Approve
+                          </button>
+                          <button className="flex items-center gap-1 px-2 py-1 text-xs bg-red-100 text-red-800 rounded hover:bg-red-200">
+                            <X className="w-3 h-3" />
+                            Reject
+                          </button>
+                        </div>
+                      )}
+                      <div className="flex gap-1">
+                        <button className="flex items-center gap-1 px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                          <Eye className="w-3 h-3" />
+                          View
+                        </button>
+                        <button className="flex items-center gap-1 px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                          <MessageCircle className="w-3 h-3" />
+                          Comment
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        
-        {/* Legend */}
-        <div className="flex justify-center gap-6 text-sm mt-4">
-          <div className="flex items-center">
-            <span className="inline-block w-4 h-4 bg-green-500 rounded-full mr-2"></span>
-            <span className="text-gray-700 font-medium">Safe (≥85%)</span>
-          </div>
-          <div className="flex items-center">
-            <span className="inline-block w-4 h-4 bg-yellow-500 rounded-full mr-2"></span>
-            <span className="text-gray-700 font-medium">Warning (75-85%)</span>
-          </div>
-          <div className="flex items-center">
-            <span className="inline-block w-4 h-4 bg-red-500 rounded-full mr-2"></span>
-            <span className="text-gray-700 font-medium">Critical (&lt;75%)</span>
-          </div>
-        </div>
-      </div>
 
-      {/* Recent Absence History */}
-      <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-          <svg className="w-5 h-5 text-orange-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          Recent Absence History
-        </h2>
-        <div className="space-y-4">
-          {[
-            ["Computer Networks", "Medical Leave", "Approved"],
-            ["Software Engineering", "Family Emergency", "Approved"],
-            ["Computer Networks", "Sick", "Pending"],
-            ["Machine Learning", "Technical Issues", "Approved"]
-          ].map(([subject, reason, status], i) => (
-            <div key={i} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 border border-gray-200">
-              <div className="flex items-center">
-                <div className={`w-3 h-3 rounded-full mr-4 ${
-                  status === "Approved" ? "bg-green-500" :
-                  status === "Pending" ? "bg-yellow-500" : "bg-red-500"
-                }`}></div>
-                <div>
-                  <p className="font-semibold text-gray-800">{subject}</p>
-                  <p className="text-sm text-gray-600">{reason}</p>
-                </div>
-              </div>
-              <span className={`text-sm font-semibold px-3 py-1 rounded-full ${
-                status === "Approved" ? "bg-green-100 text-green-700" :
-                status === "Pending" ? "bg-yellow-100 text-yellow-700" : 
-                "bg-red-100 text-red-700"
-              }`}>{status}</span>
+        <div className="p-4 border-t border-gray-200">
+          <div className="flex justify-center gap-8">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-yellow-600">1</div>
+              <div className="text-sm text-gray-600">Pending Requests</div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer group">
-          <div className="text-center">
-            <div className="p-4 bg-blue-50 rounded-full w-16 h-16 mx-auto mb-4 group-hover:bg-blue-100 transition-colors duration-200">
-              <svg className="w-8 h-8 text-blue-600 mx-auto mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">1</div>
+              <div className="text-sm text-gray-600">Approved</div>
             </div>
-            <p className="font-bold text-gray-900 mb-2">Apply for Leave</p>
-            <p className="text-sm text-gray-600">Submit absence request with proper documentation</p>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer group">
-          <div className="text-center">
-            <div className="p-4 bg-purple-50 rounded-full w-16 h-16 mx-auto mb-4 group-hover:bg-purple-100 transition-colors duration-200">
-              <svg className="w-8 h-8 text-purple-600 mx-auto mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-red-600">1</div>
+              <div className="text-sm text-gray-600">Rejected</div>
             </div>
-            <p className="font-bold text-gray-900 mb-2">View Detailed Report</p>
-            <p className="text-sm text-gray-600">Month-wise breakdown and analytics</p>
-          </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer group">
-          <div className="text-center">
-            <div className="p-4 bg-red-50 rounded-full w-16 h-16 mx-auto mb-4 group-hover:bg-red-100 transition-colors duration-200">
-              <svg className="w-8 h-8 text-red-600 mx-auto mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">3</div>
+              <div className="text-sm text-gray-600">Total Requests</div>
             </div>
-            <p className="font-bold text-red-600 mb-2">Improvement Plan</p>
-            <p className="text-sm text-gray-600">Get personalized attendance tips</p>
           </div>
         </div>
       </div>
     </div>
   );
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'mark':
+        return renderMarkAttendance();
+      case 'reports':
+        return renderReports();
+      case 'summary':
+        return renderClassSummary();
+      case 'leave':
+        return renderLeaveRequests();
+      default:
+        return renderMarkAttendance();
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-bold text-black">Attendance & Class Summary</h1>
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Calendar className="w-4 h-4" />
+            <span>6/28/2025</span>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-200 mb-6">
+          <div className="flex border-b gap-50 border-gray-200">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === tab.id
+                    ? 'border-blue-500 text-blue-600 bg-blue-50'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {renderContent()}
+      </div>
+    </div>
+  );
 };
 
-export default Attendance;
+export default AttendanceSystem;

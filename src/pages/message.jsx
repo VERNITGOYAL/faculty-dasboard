@@ -1,314 +1,197 @@
 import React, { useState } from "react";
-import { Search, BookOpen, Clock, AlertTriangle, CreditCard, Download, Users, Calendar, Star, Filter, Bell } from "lucide-react";
+import {
+  Users,
+  MessageSquareText,
+  Bell,
+  Send,
+  Search,
+  PlusCircle
+} from "lucide-react";
 
-const LibraryServices = () => {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [searchQuery, setSearchQuery] = useState('');
+const tabs = ["Conversations", "Compose", "Announcements", "Groups"];
+
+export default function InternalMessaging() {
+  const [activeTab, setActiveTab] = useState("Conversations");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
-                <BookOpen className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  Library Services
-                </h1>
-                <p className="text-sm text-gray-600">Manage your books, access digital resources, and track fines</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <button className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors">
-                <Bell className="w-5 h-5" />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-              </button>
-              <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2">
-                <CreditCard className="w-4 h-4" />
-                <span>Library Card</span>
-              </button>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <h1 className="text-3xl font-bold text-blue-900 mb-4">Internal Messaging</h1>
+
+      {/* Tab Navigation */}
+      <div className="flex space-x-4 mb-6 gap-55  border-b">
+        {tabs.map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-4 py-2 font-medium ${
+              activeTab === tab ? "border-b-2 border-blue-700 text-blue-700" : "text-gray-600"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-6">
-        {/* Navigation Tabs */}
-        <div className="flex space-x-1 mb-6 bg-white/60 backdrop-blur-sm p-1 rounded-xl border border-gray-200">
-          {[
-            { id: 'overview', label: 'Overview', icon: BookOpen },
-            { id: 'digital', label: 'Digital Resources', icon: Download },
-            { id: 'reservations', label: 'Reservations', icon: Calendar },
-            { id: 'fines', label: 'Fines', icon: CreditCard }
-          ].map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setActiveTab(id)}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 ${
-                activeTab === id
-                  ? 'bg-white text-blue-600 shadow-md'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span className="font-medium">{label}</span>
-            </button>
-          ))}
-        </div>
+      {/* Content Switcher */}
+      <div className="bg-white rounded-lg shadow p-4">
+        {activeTab === "Conversations" && <Conversations />}
+        {activeTab === "Compose" && <Compose />}
+        {activeTab === "Announcements" && <Announcements />}
+        {activeTab === "Groups" && <Groups />}
+      </div>
+    </div>
+  );
+}
 
-        {/* Enhanced Search and Stats */}
-        <div className="grid grid-cols-1 lg:grid-cols-6 gap-6 mb-8">
-          {/* Search */}
-          <div className="lg:col-span-2 bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="Search books, authors, or topics..."
-              />
-            </div>
+function Conversations() {
+  return (
+    <div className="flex">
+      <div className="w-1/3 border-r text-black pr-4">
+        <h2 className="text-lg font-semibold text-black mb-2">Messages</h2>
+        <div className="relative mb-4">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search"
+            className="w-full pl-8 pr-2 py-2 border rounded"
+          />
+        </div>
+        <ul className="space-y-2 ">
+          <li className="bg-blue-100  p-2 rounded">
+            <div className="font-medium">Rahul Sharma</div>
+            <div className="text-sm text-gray-500">Thank you for the feedback...</div>
+          </li>
+          <li className="relative p-2 hover:bg-gray-100 rounded">
+            <div className="font-medium">Dr. Priya Gupta</div>
+            <div className="text-sm text-gray-500">Meeting scheduled...</div>
+            <span className="absolute top-2 right-2 text-xs bg-red-500 text-white px-2 rounded-full">2</span>
+          </li>
+          <li className="relative p-2 hover:bg-gray-100 rounded">
+            <div className="font-medium">Computer Science Dept</div>
+            <div className="text-sm text-gray-500">New curriculum update...</div>
+            <span className="absolute top-2 right-2 text-xs bg-red-500 text-white px-2 rounded-full">1</span>
+          </li>
+        </ul>
+      </div>
+
+      <div className="w-2/3 text-black pl-4">
+        <h2 className="text-lg font-semibold  mb-2">Rahul Sharma</h2>
+        <div className="space-y-4">
+          <div className="bg-gray-100 p-2 rounded w-fit max-w-md">
+            Sir, I have submitted my Data Structures assignment. Could you please review it?
+            <div className="text-xs text-gray-500">10:30 AM</div>
           </div>
-
-          {/* Stats Cards */}
-          {[
-            { label: 'Books Issued', value: '4', color: 'blue', icon: BookOpen },
-            { label: 'Books Returned', value: '2', color: 'green', icon: BookOpen },
-            { label: 'Overdue', value: '1', color: 'red', icon: AlertTriangle },
-            { label: 'Total Fines', value: '₹70', color: 'orange', icon: CreditCard }
-          ].map(({ label, value, color, icon: Icon }, i) => (
-            <div key={i} className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">{label}</p>
-                  <p className={`text-2xl font-bold ${
-                    color === 'red' ? 'text-red-600' : 
-                    color === 'green' ? 'text-green-600' :
-                    color === 'orange' ? 'text-orange-600' :
-                    'text-blue-600'
-                  }`}>
-                    {value}
-                  </p>
-                </div>
-                <div className={`p-3 rounded-xl ${
-                  color === 'red' ? 'bg-red-100 text-red-600' :
-                  color === 'green' ? 'bg-green-100 text-green-600' :
-                  color === 'orange' ? 'bg-orange-100 text-orange-600' :
-                  'bg-blue-100 text-blue-600'
-                }`}>
-                  <Icon className="w-6 h-6" />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Enhanced Alert */}
-        <div className="bg-gradient-to-r from-red-50 to-orange-50 border border-red-200 rounded-2xl p-6 mb-8 shadow-lg">
-          <div className="flex items-start space-x-4">
-            <div className="p-2 bg-red-100 rounded-lg">
-              <AlertTriangle className="w-6 h-6 text-red-600" />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-red-800 mb-1">Overdue Alert</h3>
-              <p className="text-red-700">You have 1 overdue book. Please return it immediately to avoid additional fines.</p>
-              <button className="mt-3 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                View Details
-              </button>
-            </div>
+          <div className="bg-blue-500 text-white p-2 rounded w-fit max-w-md ml-auto">
+            I've received your assignment. I'll review it by tomorrow and provide feedback.
+            <div className="text-xs text-white">2:15 PM</div>
+          </div>
+          <div className="bg-gray-100 p-2 rounded w-fit max-w-md">
+            Thank you for the feedback on my assignment. I'll work on the improvements you suggested.
+            <div className="text-xs text-gray-500">4:20 PM</div>
           </div>
         </div>
-
-        {/* Tab Content */}
-        {activeTab === 'overview' && (
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-            {/* Currently Issued Books */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold text-gray-900">Currently Issued Books</h2>
-                  <Filter className="w-5 h-5 text-gray-500" />
-                </div>
-              </div>
-              <div className="p-6 space-y-4">
-                {[
-                  ["Data Structures and Algorithms", "Mark Allen", "2024-06-01", "2024-06-21", "Active", 4.8],
-                  ["Machine Learning", "Andrew Ng", "2024-05-20", "2024-06-10", "Overdue", 4.9],
-                  ["Clean Code", "Robert C. Martin", "2024-06-10", "2024-07-01", "Active", 4.7],
-                  ["System Design Interview", "Alex Xu", "2024-06-05", "2024-06-25", "Active", 4.6]
-                ].map(([title, author, issueDate, dueDate, status, rating], i) => (
-                  <div key={i} className="group bg-gray-50 hover:bg-gray-100 rounded-xl p-4 transition-all duration-300 hover:shadow-md">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <h3 className="font-semibold text-gray-900">{title}</h3>
-                          <div className="flex items-center space-x-1">
-                            <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                            <span className="text-sm text-gray-600">{rating}</span>
-                          </div>
-                        </div>
-                        <p className="text-sm text-gray-600 mb-2">by {author}</p>
-                        <div className="flex items-center space-x-4 text-xs text-gray-500">
-                          <span>Issued: {issueDate}</span>
-                          <span>Due: {dueDate}</span>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                          status === 'Overdue' 
-                            ? 'bg-red-100 text-red-800' 
-                            : 'bg-green-100 text-green-800'
-                        }`}>
-                          {status}
-                        </span>
-                        <div className="flex space-x-2 mt-3">
-                          <button className="bg-blue-600 text-white px-3 py-1 rounded-lg text-xs hover:bg-blue-700 transition-colors">
-                            Renew
-                          </button>
-                          <button className="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg text-xs hover:bg-gray-400 transition-colors">
-                            Return
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Reserved Books */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-pink-50">
-                <h2 className="text-xl font-bold text-gray-900">Reserved Books</h2>
-              </div>
-              <div className="p-6 space-y-4">
-                {[
-                  ["Artificial Intelligence", "Stuart Russell", "2024-07-01", 1],
-                  ["Design Patterns", "Erich Gamma", "2024-07-05", 2]
-                ].map(([title, author, available, position], i) => (
-                  <div key={i} className="group bg-gray-50 hover:bg-gray-100 rounded-xl p-4 transition-all duration-300 hover:shadow-md">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 mb-1">{title}</h3>
-                        <p className="text-sm text-gray-600 mb-2">by {author}</p>
-                        <p className="text-xs text-gray-500">Expected: {available}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium mb-2">
-                          Position #{position}
-                        </div>
-                        <button className="bg-red-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-600 transition-colors">
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'digital' && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-teal-50">
-              <h2 className="text-xl font-bold text-gray-900">Digital Resources</h2>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  ["IEEE Xplore Digital Library", "Full Access", "green"],
-                  ["Springer eBooks", "Limited", "yellow"],
-                  ["ACM Digital Library", "Full Access", "green"],
-                  ["GitHub Learning Platform", "Full Access", "green"]
-                ].map(([platform, access, color], i) => (
-                  <div key={i} className="group bg-gray-50 hover:bg-gray-100 rounded-xl p-4 transition-all duration-300 hover:shadow-md">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h3 className="font-semibold text-gray-900">{platform}</h3>
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium mt-2 ${
-                          color === 'green' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                        }`}>
-                          {access}
-                        </span>
-                      </div>
-                      <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                        Access
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'fines' && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-red-50">
-              <h2 className="text-xl font-bold text-gray-900">Fines & Penalties</h2>
-            </div>
-            <div className="p-6 space-y-4">
-              {[
-                ["Clean Code", "Pending", "₹70"],
-                ["System Design", "Paid", "₹0"]
-              ].map(([book, status, fine], i) => (
-                <div key={i} className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{book}</h3>
-                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium mt-1 ${
-                      status === 'Pending' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                    }`}>
-                      {status}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-lg font-bold text-gray-900">{fine}</p>
-                    {status === "Pending" && (
-                      <button className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors mt-2">
-                        Pay Now
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Quick Actions */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { title: "Request New Book", desc: "Suggest a book for the library", icon: BookOpen, color: "blue" },
-            { title: "Reserve Library Seat", desc: "Reserve reading/study space", icon: Users, color: "green" },
-            { title: "Reading Room Booking", desc: "Reserve group study rooms", icon: Calendar, color: "purple" }
-          ].map(({ title, desc, icon: Icon, color }, i) => (
-            <div key={i} className="group bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 cursor-pointer">
-              <div className="flex items-center space-x-4">
-                <div className={`p-3 rounded-xl ${
-                  color === 'blue' ? 'bg-blue-100 text-blue-600' :
-                  color === 'green' ? 'bg-green-100 text-green-600' :
-                  'bg-purple-100 text-purple-600'
-                }`}>
-                  <Icon className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">{title}</h3>
-                  <p className="text-sm text-gray-600">{desc}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="mt-4 flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Type your message..."
+            className="w-full p-2 border rounded"
+          />
+          <button className="bg-blue-600 text-white p-2 rounded">
+            <Send className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default LibraryServices;
+function Compose() {
+  return (
+    <div className="text-black"> 
+      <h2 className="text-xl font-semibold text-black mb-4">Compose New Message</h2>
+      <form className="space-y-4">
+        <div className="flex gap-4">
+          <select className="border p-2 rounded w-1/2">
+            <option>Individual Student</option>
+          </select>
+          <select className="border p-2 rounded w-1/2">
+            <option>Rahul Sharma (2021001)</option>
+          </select>
+        </div>
+        <input
+          type="text"
+          placeholder="Enter message subject"
+          className="w-full border p-2 rounded"
+        />
+        <textarea
+          placeholder="Type your message here..."
+          className="w-full border p-2 rounded"
+          rows="5"
+        ></textarea>
+        <div className="flex gap-2">
+          <button className="p-2 border rounded">Attach File</button>
+          <button className="bg-blue-600 text-white p-2 rounded">Send Message</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+function Announcements() {
+  return (
+    <div className="space-y-4 text-black">
+      <div className="bg-white border rounded p-4">
+        <div className="flex justify-between">
+          <div>
+            <h3 className="font-semibold">Mid-term Exam Schedule</h3>
+            <p className="text-sm text-gray-500">To: All Students • 2024-06-25</p>
+            <p className="mt-2">Mid-term examinations will begin from July 1st, 2024.</p>
+          </div>
+          <span className="text-green-600 font-medium">sent</span>
+        </div>
+        <button className="mt-2 px-3 py-1 border text-sm rounded">View Recipients</button>
+      </div>
+
+      <div className="bg-white border rounded p-4">
+        <div className="flex justify-between">
+          <div>
+            <h3 className="font-semibold">Guest Lecture on AI</h3>
+            <p className="text-sm text-gray-500">To: CS Department • 2024-06-23</p>
+            <p className="mt-2">Distinguished guest lecture on Artificial Intelligence trends.</p>
+          </div>
+          <span className="text-yellow-600 font-medium">draft</span>
+        </div>
+        <div className="flex gap-2 mt-2">
+          <button className="px-3 py-1 border text-sm rounded">Edit</button>
+          <button className="bg-blue-600 text-white px-3 py-1 text-sm rounded">Send Now</button>
+        </div>
+      </div>
+
+      <button className="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded">
+        <Bell className="w-4 h-4" /> Create Announcement
+      </button>
+    </div>
+  );
+}
+
+function Groups() {
+  return (
+    <div className="grid grid-cols-2 text-black gap-4">
+      {[
+        { name: "CS-201 Students", members: 45 },
+        { name: "CS-401 Students", members: 32 },
+        { name: "Faculty Colleagues", members: 12 }
+      ].map((group) => (
+        <div key={group.name} className="border p-4 rounded">
+          <div className="font-semibold text-lg mb-1">{group.name}</div>
+          <div className="text-sm text-gray-500 mb-2">{group.members} members</div>
+          <button className="px-3 py-1 border text-sm rounded">Manage Group</button>
+        </div>
+      ))}
+      <div className="border-dashed border-2 border-gray-300 flex flex-col items-center justify-center p-4 rounded">
+        <PlusCircle className="w-6 h-6 text-blue-600" />
+        <button className="mt-2 px-3 py-1 bg-blue-600 text-white rounded">Add Group</button>
+      </div>
+    </div>
+  );
+}
