@@ -13,7 +13,7 @@ import Attendance from './pages/Attendance';
 import ExamsResults from './pages/feedback';
 import FeeManagement from './pages/leave';
 import Library from './pages/message';
-import SkillsLabs from './pages/portal';
+import FIRSGrievancePortal from './pages/portal';
 import Placement from './pages/office';
 import Wellness from './pages/Wellness';
 import Residence from './pages/residence';
@@ -42,7 +42,7 @@ function App() {
             <Route path="/feedback" element={<ExamsResults />} />
             <Route path="/leave" element={<FeeManagement />} />
             <Route path="/message" element={<Library />} />
-            <Route path="/portal" element={<SkillsLabs />} />
+            <Route path="/portal" element={<FIRSGrievancePortal />} />
            <Route path="/office" element={<Placement />} />
             <Route path="/wellness" element={<Wellness />} />
             <Route path="/residence" element={<Residence />} />
